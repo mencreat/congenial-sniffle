@@ -1,0 +1,83 @@
+$breakpoints: (
+  "xs": 576px,
+  "sm": 768px,
+  "md": 992px,
+  "lg": 1200px,
+  "xl": 1440px,
+  "xxl": 1680px,
+  "xxxl": 1920px
+);
+
+@mixin breakpoint-up($breakpoint) {
+  $value: map-get($breakpoints, $breakpoint);
+
+  @if $value {
+    @media (min-width: $value) {
+      @content;
+    }
+  } @else {
+    @warn "No value could be retrieved from `#{$breakpoint}`. Make sure it is defined in `$breakpoints` map.";
+  }
+}
+
+@mixin breakpoint-down($breakpoint) {
+  $value: map-get($breakpoints, $breakpoint);
+
+  @if $value {
+    @media (max-width: ($value - 1)) {
+      @content;
+    }
+  } @else {
+    @warn "No value could be retrieved from `#{$breakpoint}`. Make sure it is defined in `$breakpoints` map.";
+  }
+}
+
+@each $breakpoint, $value in $breakpoints {
+  @include breakpoint-up($breakpoint) {
+    .is-hidden-#{$breakpoint}-up {
+      display: none !important;
+    }
+  }
+
+  @include breakpoint-down($breakpoint) {
+    .is-hidden-#{$breakpoint}-down {
+      display: none !important;
+    }
+  }
+}
+
+@function get-breakpoint($bp) {
+  @if type-of($bp) == 'number' {
+    @return $bp;
+  } @else if map-has-key($breakpoints, $bp) {
+    @return map-get($breakpoints, $bp);
+  } @else {
+    @error 'Breakpoint "#{$bp}" not found in $breakpoints map.';
+  }
+}
+
+@function strip-unit($number) {
+  @if type-of($number) == 'number' and not unitless($number) {
+    @return $number / ($number * 0 + 1);
+  }
+  @return $number;
+}
+
+@function clamp-bp($min-bp, $max-bp, $min-size, $max-size) {
+  $min-bp-px: strip-unit(get-breakpoint($min-bp));
+  $max-bp-px: strip-unit(get-breakpoint($max-bp));
+  
+  // Calculate the slope for the linear interpolation
+  $slope: round(($max-size - $min-size) / ($max-bp-px - $min-bp-px) * 1000) / 1000;
+  
+  // Calculate the y-intercept
+  $intercept: round(($min-size - $slope * $min-bp-px) * 1000) / 1000;
+  
+  // Generate the clamp rule
+  @return clamp(#{$min-size}px, calc(#{$intercept}px + #{$slope * 100}vw), #{$max-size}px);
+}
+
+// Example usage of clamp-bp function
+// .component {
+//   font-size: clamp-bp('sm', 'lg', 20, 40);
+// }
