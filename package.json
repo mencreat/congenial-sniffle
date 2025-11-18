@@ -35,8 +35,15 @@
     "stylelint-config-standard-scss": "^15.0.1"
   },
   "lint-staged": {
-    "*.js": ["eslint --fix"],
-    "*.{scss,css}": ["stylelint --fix"],
+    "*.js": [
+      "eslint --fix"
+    ],
+    "*.{scss,css}": [
+      "stylelint --fix"
+    ],
     "*.html": "htmlhint"
+  },
+  "dependencies": {
+    "tailwindcss": "^4.1.17"
   }
 }

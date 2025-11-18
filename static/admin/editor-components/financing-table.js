@@ -35,7 +35,7 @@ CMS.registerEditorComponent({
     name: 'disclaimer',
     widget: 'string',
     required: false,
-  }, {
+  }, { name: 'author', widget: 'string', required: false, hint: 'Nama penulis' }, { name: 'rating', widget: 'number', required: false, hint: 'Angka rating 0-5' }, { name: 'ratingContent', widget: 'text', required: false, hint: 'Deskripsi rating / komentar' }, {
     name: 'button',
     widget: 'object',
     fields: [

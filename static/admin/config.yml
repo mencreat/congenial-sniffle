@@ -3,7 +3,10 @@ local_backend: true
 backend:
   name: git-gateway
   branch: __BRANCH__
+  # branch: main
   squash_merges: true
+
+theme: "dark"
 
 display_url: https://hugo-template.netlify.app/
 logo_url: /media/brand/logo.svg

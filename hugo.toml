@@ -3,6 +3,9 @@ disableFastRender = true
 languageCode = "en-en"
 defaultContentLanguage = "en"
 
+[pagination]
+  pagerSize = 6
+
 [params]
 description = "Template repository for Jamstack projects"
 image = "/media/brand/og-image.jpg"

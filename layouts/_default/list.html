@@ -2,14 +2,58 @@
 <div class="container">
   <h1>{{ .Title }}</h1>
 
+  {{ $paginator := .Paginate (where .Pages "Type" "posts") }}
+
   <div class="grid">
-    {{ range .Pages }}
-      <article class="col-12 col-sm-6">
+    {{ range $paginator.Pages }}
+      <article class="col-12 col-sm-6 bg-gray-900">
+        <!-- Icon -->
+      {{ if .Params.icon }}
+        <img src="{{ .Params.icon }}" alt="{{ .Title }} icon" class="w-12 h-12 mb-2">
+      {{ end }}
+        {{ if .Params.image }}
+        <img src="{{ .Params.image }}" alt="{{ .Title }}" class="mb-2 w-full h-48 object-cover">
+      {{ end }}
         <h4>{{ .Title }}</h4>
         <p>{{ .Description }}</p>
+        <!-- Author & Date -->
+      <p class="text-sm text-gray-400">
+        By {{ with .Params.author }}{{ . }}{{ end }}
+        | {{ .Date.Format "Jan 2, 2006" }}
+      </p>
+
+      <!-- Rating -->
+      {{ with .Params.rating }}
+        <p class="text-yellow-400">Rating: {{ . }} / 5</p>
+      {{ end }}
+      {{ with .Params.rantingContent }}
+        <p class="text-yellow-400">RatingContent: {{ . }}</p>
+      {{ end }}
         <a href="{{ .RelPermalink }}">{{ T "more" }}</a>
       </article>
     {{ end }}
   </div>
+
+   <!-- Pagination UI -->
+  <div class="pagination flex items-center justify-center gap-4 my-6">
+    {{ with $paginator }}
+      {{ if .HasPrev }}
+        <a href="{{ .Prev.URL }}" class="pagination-btn">&lt; prev</a>
+      {{ else }}
+        <span class="pagination-btn disabled">&lt; prev</span>
+      {{ end }}
+
+      <span class="pagination-info">
+        page {{ .PageNumber }} of {{ .TotalPages }}
+      </span>
+
+      {{ if .HasNext }}
+        <a href="{{ .Next.URL }}" class="pagination-btn">next &gt;</a>
+      {{ else }}
+        <span class="pagination-btn disabled">next &gt;</span>
+      {{ end }}
+    {{ end }}
+  </div>
+
 </div>
 {{ end }}
