@@ -43,6 +43,9 @@ collections:
       {name: title, widget: string},
       {name: description, widget: text},
       {name: image, widget: image},
+      {name: author, widget: string, hint: "Nama penulis"},
+      {name: rating, widget: number, min: 0, max: 5, hint: "Angka rating 0-5"},
+      {name: ratingContent, widget: text, hint: "rating konten"},
       {name: body, widget: markdown},
       *VISIBLE_IN_CMS,
     ]
